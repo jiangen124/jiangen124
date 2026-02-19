@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAILED</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:#0b0000;
+    font-family:"Rowdies",sans-serif;
+    color:#fff;
+}
+
+/* Fake scam website background */
+.scam-bg{
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at center, #1a0000, #000000);
+    filter:blur(2px);
+    opacity:0.8;
+}
+
+/* RANDOM POPUPS */
+.warning{
+    position:absolute;
+    background:#ff0000;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:14px;
+    box-shadow:0 0 25px rgba(255,0,0,0.9);
+    font-size:1.1rem;
+    animation:pop 0.1s ease;
+    z-index:10;
+}
+
+@keyframes pop{
+    from{transform:scale(0);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+/* FINAL BIG POPUP */
+.final-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.8);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.5s ease;
+    z-index:50;
+}
+.final-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.final-box{
+    width:650px;
+    padding:40px;
+    border-radius:30px;
+    background:rgba(20,0,0,0.95);
+    text-align:center;
+    box-shadow:0 0 40px rgba(255,0,0,0.9);
+    scale:1.35;
+}
+
+.final-box h1{
+    color:#ff2b2b;
+    font-size:2.2rem;
+    margin-bottom:20px;
+}
+
+.final-box p{
+    font-size:1.3rem;
+    line-height:1.5;
+    margin-bottom:30px;
+}
+
+.restart-btn{
+    padding:16px 40px;
+    border-radius:40px;
+    border:none;
+    background:#ff2b2b;
+    color:#fff;
+    font-size:1.3rem;
+    cursor:pointer;
+    transition:.3s;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 700;
+}
+.restart-btn:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 25px rgba(255,0,0,0.9);
+}
+</style>
+</head>
+
+<body>
+
+<div class="scam-bg"></div>
+
+<!-- FINAL MESSAGE -->
+<div class="final-overlay" id="finalOverlay">
+    <div class="final-box">
+        <h1>⚠️ You’ve Been Deceived</h1>
+        <p>
+        The person you were talking to was not real.  
+        It was AI pretending to be someone trustworthy.  
+        <br><br>
+        You have revealed personal details that can now be used for impersonation and scams.  
+        You are now in a dangerous position.
+        </p>
+
+        <button class="restart-btn" onclick="restartGame()">
+            Restart & Get a Second Chance
+        </button>
+    </div>
+</div>
+
+<audio id="errorSound" src="errormp3.mp3" loop></audio>
+
+<script>
+/* AUDIO */
+const errorSound = document.getElementById("errorSound");
+
+/* play looping error sound when page starts */
+window.onload = () => {
+    errorSound.play().catch(()=>{});
+};
+
+/* RANDOM POPUPS SPAWNING */
+function createWarning(){
+    const warn=document.createElement("div");
+    warn.className="warning";
+    warn.textContent="Error 404⚠️";
+    
+    warn.style.top=Math.random()*90+"vh";
+    warn.style.left=Math.random()*90+"vw";
+
+    document.body.appendChild(warn);
+
+    setTimeout(()=>warn.remove(),2000);
+}
+
+/* spawn many warnings */
+let warningInterval=setInterval(createWarning,200);
+
+/* FINAL BIG POPUP AFTER TIME */
+setTimeout(()=>{
+    clearInterval(warningInterval);
+
+    /* stop looping sound when popup shows */
+    errorSound.pause();
+    errorSound.currentTime = 0;
+
+    document.getElementById("finalOverlay").classList.add("show");
+},3000);
+
+/* RESTART GAME */
+function restartGame(){
+    window.location.href="second draft- cover.html";
+}
+</script>
+
+
+</body>
+</html>

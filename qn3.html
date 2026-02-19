@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question 3</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+
+    background-image:url("qn3bg.JPG");
+    background-size:cover;
+    background-position:center;
+
+    color:rgb(108,1,1);
+}
+
+/* ================= RISK ================= */
+
+.risk-meter{
+    position:fixed;
+    top:45px;
+    right:80px;
+    width:240px;
+    background:rgba(255,255,255,.55);
+    padding:14px 18px 18px;
+    border-radius:18px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 0 18px rgba(108,1,1,.3);
+    z-index:5;
+    scale:1.4;
+}
+
+.risk-header{
+    text-align:center;
+    font-size:1.3rem;
+    margin-bottom:10px;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.risk-bar-bg{
+    width:100%;
+    height:18px;
+    background:#eee;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.risk-bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ffd700,#ff8c00,#b30000);
+    transition:.6s;
+}
+
+/* danger mode */
+.risk-meter.danger{
+    background:rgba(10,0,0,.9);
+    border:2px solid rgb(108,1,1);
+    box-shadow:0 0 25px rgba(108,1,1,.6);
+}
+
+.risk-meter.danger .risk-header{
+    color:rgb(200,20,20);
+}
+
+/* ================= MAIN ================= */
+
+.page{
+    width:100%;
+    height:100%;
+    display:flex;
+    padding:80px;
+    gap:50px;
+    align-items:center;
+}
+
+/* ================= CHAT PANEL ================= */
+
+.chat-panel{
+    width:650px;
+    height:700px;
+    background:linear-gradient(#f6C0C0,#CE3B36);
+    border-radius:28px;
+    box-shadow:0 0 35px rgba(0,0,0,.3);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    font-family:"Rowdies",sans-serif;
+    font-weight:300;
+    margin-top:-160px;
+    margin-left:110px;
+    scale:1.45;
+}
+
+.chat-header{
+    padding:20px 30px;
+    background:rgba(255,255,255,.8);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    font-family:"Rowdies",sans-serif;
+    font-weight:700;
+}
+
+.chat-header span{font-size:1.1rem;}
+
+.online{
+    font-size:1rem;
+    color:green;
+}
+
+.chat{
+    flex:1;
+    padding:24px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.message{
+    display:flex;
+    flex-direction:column;
+    max-width:65%;
+}
+
+.jen{align-self:flex-end;}
+.tom{align-self:flex-start;}
+
+.name{
+    font-size:.7rem;
+    opacity:.6;
+    margin-bottom:4px;
+}
+
+.bubble{
+    padding:12px 16px;
+    border-radius:18px;
+    font-size:1.05rem;
+    line-height:1.4;
+}
+
+.jen .bubble{background:#ffdede;}
+.tom .bubble{background:#e8f0ff;}
+
+.typing{
+    font-size:.8rem;
+    opacity:.6;
+}
+
+/* ================= RIGHT PANEL ================= */
+
+.right-panel{
+    width:420px;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+    margin-left:380px;
+    margin-top:-108px;
+    scale:1.45;
+}
+
+.story-text{
+    font-size:1.5rem;
+    font-family:"Lobster Two",sans-serif;
+    font-weight:700;
+    color:rgb(108,1,1);
+}
+
+.option{
+    padding:14px 26px;
+    border:2px solid rgb(108,1,1);
+    border-radius:40px;
+    background:rgba(255,255,255,.6);
+    cursor:pointer;
+    transition:.3s;
+    text-align:center;
+    font-size:1.23rem;
+    font-family:"Rowdies",sans-serif;
+}
+
+.option:hover{transform:scale(1.05);}
+
+.red{background:#a40000;color:white;border-color:#a40000;}
+.green{background:#2e8b57;color:white;border-color:#2e8b57;}
+.yellow{background:#e6b800;color:black;border-color:#e6b800;}
+</style>
+</head>
+
+<body>
+
+<!-- RISK METER -->
+<div class="risk-meter">
+    <div class="risk-header">⚠ Risk Level</div>
+    <div class="risk-bar-bg">
+        <div class="risk-bar-fill" id="riskBar"></div>
+    </div>
+</div>
+
+<div class="page">
+
+<!-- CHAT -->
+<div class="chat-panel">
+    <div class="chat-header">
+        <span>Jennifer & Tommy</span>
+        <div class="online">● Online</div>
+    </div>
+
+    <div class="chat" id="chat"></div>
+</div>
+
+<!-- RIGHT -->
+<div class="right-panel">
+    <div class="story-text" id="storyText">
+        The conversation continues, but his replies are almost always instant, with perfect grammar and spelling each time.
+    </div>
+
+    <div class="option" id="opt1" onclick="choose(1)">
+        He is just a great communicator, bonus points that he is so good at English!
+    </div>
+
+    <div class="option" id="opt2" onclick="choose(2)">
+        Hmm suspicious...they could be using AI tools!
+    </div>
+
+    <div class="option" id="opt3" onclick="choose(3)">
+        I don't sense anything unusual...
+    </div>
+</div>
+
+</div>
+
+<script>
+/* ================= RISK STATE ================= */
+let riskLevel = Number(localStorage.getItem("riskLevel")) || 0;
+const inc = 100 / 7;
+
+const riskBar = document.getElementById("riskBar");
+const riskMeter = document.querySelector(".risk-meter");
+
+function syncRiskMeter(){
+    if(riskLevel > 100) riskLevel = 100;
+    riskBar.style.width = riskLevel + "%";
+
+    if(riskLevel > 0){
+        riskMeter.classList.add("danger");
+    }else{
+        riskMeter.classList.remove("danger");
+    }
+}
+
+syncRiskMeter();
+
+/* ================= CHAT LOGIC ================= */
+const chat=document.getElementById("chat");
+
+function add(name,text,cls){
+    let wrap=document.createElement("div");
+    wrap.className="message "+cls;
+
+    let n=document.createElement("div");
+    n.className="name";
+    n.textContent=name;
+
+    let b=document.createElement("div");
+    b.className="bubble";
+    b.textContent=text;
+
+    wrap.appendChild(n);
+    wrap.appendChild(b);
+    chat.appendChild(wrap);
+    chat.scrollTop=chat.scrollHeight;
+}
+
+function typing(){
+    let t=document.createElement("div");
+    t.id="typing";
+    t.className="typing tom";
+    t.textContent="Tommy is typing...";
+    chat.appendChild(t);
+}
+
+function stopTyping(){
+    let t=document.getElementById("typing");
+    if(t)t.remove();
+}
+
+/* ================= CONVERSATION ================= */
+setTimeout(()=>add("Jennifer","Hey Tommy... sorry for the late reply 😅","jen"),500);
+
+setTimeout(()=>{
+typing();
+setTimeout(()=>{
+stopTyping();
+add("Tommy","Hello Jennifer. No apology is necessary. I remain consistently available.","tom");
+},300);
+},2200);
+
+setTimeout(()=>add("Jennifer","Haha wow that was fast. What are you up to?","jen"),4200);
+
+setTimeout(()=>{
+typing();
+setTimeout(()=>{
+stopTyping();
+add("Tommy","I am currently completing personal development tasks and optimizing my evening schedule.","tom");
+},250);
+},5600);
+
+setTimeout(()=>add("Jennifer","That sounds... productive 😭","jen"),7600);
+
+setTimeout(()=>{
+typing();
+setTimeout(()=>{
+stopTyping();
+add("Tommy","Productivity increases life efficiency. I recommend maintaining structured routines.","tom");
+},250);
+},8800);
+
+/* ================= OPTIONS ================= */
+function next(){
+    setTimeout(()=>location.href="qn4.html",3500);
+}
+
+function choose(c){
+document.querySelectorAll(".option").forEach(o=>o.style.pointerEvents="none");
+
+if(c==1){
+opt1.classList.add("red");
+storyText.textContent="You're in danger! Don't fall for someone who isn't real, choose again.";
+
+riskLevel += inc;
+if(riskLevel > 100) riskLevel = 100;
+localStorage.setItem("riskLevel",riskLevel);
+syncRiskMeter();
+
+setTimeout(()=>{
+document.querySelectorAll(".option").forEach(opt=>opt.style.pointerEvents="auto");
+opt1.classList.remove("red");
+},2000);
+}
+
+if(c==2){
+opt2.classList.add("green");
+storyText.textContent="Nice, you're aware! Take precautions when conversing with this \"person\".";
+next();
+}
+
+if(c==3){
+opt3.classList.add("yellow");
+storyText.textContent="Oh no! You are unaware of the danger...you might not be talking to a human after all!";
+
+riskLevel += inc;
+if(riskLevel > 100) riskLevel = 100;
+localStorage.setItem("riskLevel",riskLevel);
+syncRiskMeter();
+
+next();
+}
+}
+</script>
+
+</body>
+</html>
+

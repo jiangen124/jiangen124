@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Decision</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arizonia&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:url("finalbg2.png") center/cover no-repeat;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    color:#fff;
+}
+
+/* TEXT */
+.decision-text{
+    position:absolute;
+    text-align:center;
+    top:30px;
+    font-size:2.45rem;
+    text-shadow:0 0 12px rgba(0,0,0,0.6);
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 700;
+}
+
+.bottom-text{
+    text-align: center;
+    margin-top:230px;
+    margin-bottom:-60px;
+    font-size:1.85rem;
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.icon{
+    position:absolute;
+    font-size:12rem;
+    opacity:3;
+    transition:transform .4s ease, opacity .4s ease;
+
+    /* white outline */
+    text-shadow:
+        -2px -2px 0 #fff,
+         2px -2px 0 #fff,
+        -2px  2px 0 #fff,
+         2px  2px 0 #fff,
+         0 0 10px rgba(255,255,255,0.9);
+}
+
+
+.icon.heart{ right:120px; color:#ff4dca; }
+.icon.cross{ left:120px; color:#ff0000; }
+
+.icon.active{
+    transform:scale(2.2);
+    opacity:5;
+}
+
+/* CARD (no rectangle background now) */
+.swipe-container{
+    position:relative;
+    width:420px;
+    height:680px;
+}
+
+.card{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:28px;
+    background:url("scammer profile_2.png") center/cover no-repeat;
+    cursor:grab;
+    transition:transform .3s ease, opacity .3s ease;
+    scale:1.6;
+    margin-top:120px;
+}
+
+/* swipe animation */
+.card.swipe-right{
+    transform:translateX(700px) rotate(20deg);
+    opacity:0;
+}
+.card.swipe-left{
+    transform:translateX(-700px) rotate(-20deg);
+    opacity:0;
+}
+
+/* WARNING POPUP */
+.warning-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:.4s ease;
+    z-index:30;
+    scale:1.4;
+}
+.warning-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.warning-box{
+    width:400px;
+    padding:40px;
+    border-radius:28px;
+    background:rgba(20,0,0,0.9);
+    text-align:center;
+    box-shadow:0 0 40px rgba(108,1,1,.8);
+    position:relative;
+}
+
+.warning-box h2{
+    font-family:"Rowdies",sans-serif;
+    font-size:2rem;
+    color:#b30000;
+}
+
+.close-btn{
+    position:absolute;
+    top:18px;
+    right:20px;
+    font-size:1.8rem;
+    cursor:pointer;
+}
+.close-btn:hover{transform:scale(1.2);}
+</style>
+</head>
+
+<body>
+
+<div class="decision-text">
+The time has come! Are you and Tommy Lee a match? <br>Drag the card RIGHT to match or Left to reject!💘
+</div>
+
+<div class="icon cross" id="cross">✖</div>
+<div class="icon heart" id="heart">❤</div>
+
+<div class="swipe-container">
+    <div class="card" id="card"></div>
+</div>
+
+<div class="bottom-text">
+Thank you for playing Strings Attached Dating Game!
+</div>
+
+<!-- WARNING POPUP -->
+<div id="warningOverlay" class="warning-overlay">
+    <div class="warning-box">
+        <div class="close-btn" onclick="closeWarning()">✖</div>
+        <h2>⚠️You're in a risky position! Make your next choice wisely.</h2>
+    </div>
+</div>
+
+<script>
+const card = document.getElementById("card");
+const warningOverlay = document.getElementById("warningOverlay");
+const heart = document.getElementById("heart");
+const cross = document.getElementById("cross");
+
+let startX = 0;
+let isDragging = false;
+
+/* show warning first */
+window.onload = ()=>{
+    setTimeout(()=>warningOverlay.classList.add("show"),800);
+};
+
+function closeWarning(){
+    warningOverlay.classList.remove("show");
+}
+
+/* drag logic */
+card.addEventListener("mousedown",(e)=>{
+    isDragging=true;
+    startX=e.clientX;
+});
+
+document.addEventListener("mouseup",(e)=>{
+    if(!isDragging) return;
+    isDragging=false;
+
+    let diff=e.clientX-startX;
+
+    if(diff>120){
+        card.classList.add("swipe-right");
+        heart.classList.add("active");
+        setTimeout(()=>window.location.href="failed.html",700);
+    }
+    else if(diff<-120){
+        card.classList.add("swipe-left");
+        cross.classList.add("active");
+        setTimeout(()=>window.location.href="success.html",700);
+    }
+});
+</script>
+
+</body>
+</html>

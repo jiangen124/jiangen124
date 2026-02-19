@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Ending</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&family=Lobster+Two:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:radial-gradient(circle at center, #0a1a0a, #000000);
+    color:#fff;
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 400;
+    scale:1.45;
+}
+
+/* LOCK CONTAINER */
+.lock-container{
+    position:relative;
+    width:260px;
+    height:320px;
+    margin-bottom:40px;
+}
+
+/* SHACKLE (top part) */
+.shackle{
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:140px;
+    height:140px;
+    border:14px solid #7dff9e;
+    border-bottom:none;
+    border-radius:70px 70px 0 0;
+    box-shadow:0 0 20px rgba(0,255,120,0.7);
+    transform-origin:top center;
+    animation:lockShackle 1.2s ease forwards;
+    margin-top:35px;
+}
+
+/* LOCK BODY */
+.lock-body{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:220px;
+    height:200px;
+    background:#0f3d1f;
+    border-radius:24px;
+    box-shadow:0 0 30px rgba(0,255,120,0.5);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    margin-bottom:-50px;
+}
+
+/* TEXT INSIDE LOCK */
+.lock-text{
+    opacity:0;
+    font-size:1.3rem;
+    line-height:1.4;
+    transition:opacity 1s ease;
+}
+
+/* SHOW TEXT */
+.lock-text.show{
+    opacity:1;
+}
+
+/* LOCK ANIMATION */
+@keyframes lockShackle{
+    0%{
+        transform:translateX(-50%) translateY(-60px) rotate(-10deg);
+    }
+    60%{
+        transform:translateX(-50%) translateY(0px) rotate(3deg);
+    }
+    100%{
+        transform:translateX(-50%) translateY(0px) rotate(0deg);
+    }
+}
+
+/* TITLE */
+.title{
+    position:absolute;
+    top:50px;
+    font-size:2.2rem;
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    text-shadow:0 0 12px rgba(0,255,120,0.6);
+    margin-top:185px;
+}
+
+/* RESTART BUTTON */
+.restart-btn{
+    margin-top:100px;
+    padding:16px 40px;
+    border:none;
+    border-radius:40px;
+    background:#7dff9e;
+    color:#003311;
+    font-size:1.2rem;
+    cursor:pointer;
+    transition:.3s ease;
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 700;
+    scale:1.3;
+}
+.restart-btn:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 25px rgba(0,255,120,0.9);
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+You Chose Safety! Good job!
+</div>
+
+<div class="lock-container">
+    <div class="shackle"></div>
+    <div class="lock-body">
+        <div class="lock-text" id="lockText">
+            You are safe from scams and impersonation.<br><br>
+            You took precautionary measures and did not fall for someone who wasn’t real.<br>
+            Well done!
+        </div>
+    </div>
+</div>
+
+<button class="restart-btn" onclick="restartGame()">
+Restart Game
+</button>
+<audio id="lockSound" src="locksfx2.mp3"></audio>
+
+<script>
+const lockSound = document.getElementById("lockSound");
+
+/* Play sound slightly after animation begins */
+setTimeout(()=>{
+    lockSound.play().catch(()=>{});
+},500); // sync with shackle closing motion
+
+/* Delay text reveal for dramatic effect */
+setTimeout(()=>{
+    document.getElementById("lockText").classList.add("show");
+},1500);
+
+/* Restart game */
+function restartGame(){
+    window.location.href="second draft- cover.html";
+}
+</script>
+
+
+</body>
+</html>

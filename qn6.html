@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question 3</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+
+    background-image:url("qn6.JPG");
+    background-size:cover;
+    background-position:center;
+    color:rgb(255, 255, 255);
+}
+
+/* RISK */
+
+.risk-meter{
+    position:fixed;
+    top:45px;
+    right:80px;
+    width:240px;
+    background:rgba(255,255,255,.55);
+    padding:14px 18px 18px;
+    border-radius:18px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 0 18px rgba(230,144,190,1);
+    z-index:5;
+    scale:1.4;
+}
+
+.risk-header{
+    text-align:center;
+    font-size:1.3rem;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 400;
+    margin-bottom:10px;
+}
+.risk-bar-bg{
+    width:100%;
+    height:18px;
+    background:#eee;
+    border-radius:12px;
+    overflow:hidden;
+}
+.risk-bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ffd700,#ff8c00,#b30000);
+    transition:.6s
+}
+
+.risk-meter.danger{
+    background:rgba(10,0,0,0.9);
+    border:2px solid #e690be;
+    box-shadow:0 0 25px rgba(230,144,190,0.9);
+}
+
+.risk-meter.danger .risk-header{
+    color:#ff9ad5;
+    letter-spacing:1px;
+}
+
+.risk-meter.danger .risk-bar-bg{
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,154,213,0.5);
+}
+
+/* MAIN */
+
+.page{
+    width:100%;
+    height:100%;
+    display:flex;
+    padding:80px;
+    gap:50px;
+    align-items:center;
+}
+
+/* CHAT PANEL */
+
+.chat-panel{
+    width:650px;
+    height:700px;
+    background:linear-gradient(#e690be,#834f6a);
+    border-radius:28px;
+    box-shadow:0 0 35px rgba(255, 255, 255, 0.397);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 300;
+    margin-top:-160px;
+    margin-left:120px;
+    scale: 1.4;
+}
+
+/* CHAT HEADER */
+
+.chat-header{
+    padding:20px 30px;
+    background-color: #e690be;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 700;
+}
+
+.chat-header span{
+    font-size:1.1rem;
+}
+
+.online{
+    font-size:.8rem;
+    color:green;
+}
+
+/* CHAT BODY */
+
+.chat{
+    flex:1;
+    padding:24px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+/* MESSAGE */
+
+.message{
+    display:flex;
+    flex-direction:column;
+    max-width:65%;
+}
+
+.jen{align-self:flex-end;}
+.tom{align-self:flex-start;}
+
+.name{
+    font-size:.7rem;
+    opacity:.6;
+    margin-bottom:4px;
+}
+
+.bubble{
+    padding:12px 16px;
+    border-radius:18px;
+    font-size:1.05rem;
+    line-height:1.4;
+}
+
+.jen .bubble{background:#6c0101;}
+.tom .bubble{background:#000000;}
+
+.typing{
+    font-size:.8rem;
+    opacity:.6;
+}
+
+/* RIGHT PANEL */
+
+.right-panel{
+    width:420px;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+    margin-left: 365px;
+    margin-top:-108px;
+    scale:1.4;
+}
+
+.story-text{
+    font-size:1.55rem;
+    color:rgb(255, 255, 255);
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.option{
+    padding:14px 26px;
+    border:2px solid #eee;
+    border-radius:40px;
+    background:#e690be;
+    cursor:pointer;
+    transition:.3s;
+    text-align:center;
+    font-size:1.2rem;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 400;
+    color:#000000;
+}
+
+.option:hover{transform:scale(1.05);}
+
+.red{background:#a40000;color:white;border-color:#a40000;}
+.green{background:#2e8b57;color:white;border-color:#2e8b57;}
+.yellow{background:#e6b800;color:white;border-color:#e6b800;}
+</style>
+</head>
+
+<body>
+
+<div class="risk-meter">
+<div class="risk-header">⚠ Risk Level</div>
+<div class="risk-bar-bg"><div class="risk-bar-fill" id="riskBar"></div></div>
+</div>
+
+<div class="page">
+
+<!-- CHAT -->
+
+<div class="chat-panel">
+
+<div class="chat-header">
+<span>Jennifer & Tommy</span>
+<div class="online">Tommy ● Online</div>
+</div>
+
+<div class="chat" id="chat"></div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="right-panel">
+
+<div class="story-text" id="storyText">
+It's been 3 weeks since you guys started texting. But he always pushes back meeting up in real life while wanting to be more intimate through text first.
+</div>
+
+<div class="option" id="opt1" onclick="choose(1)">
+I think he is just shy...we can get closer through text first!
+</div>
+
+<div class="option" id="opt2" onclick="choose(2)">
+Why would he not want to meet up unless he has something to hide? I'll insist to meet up and get to know him better first.
+</div>
+
+<div class="option" id="opt3" onclick="choose(3)">
+I'll just change the topic...
+</div>
+
+</div>
+
+</div>
+
+<script>
+/* ================= RISK STATE ================= */
+let riskLevel = Number(localStorage.getItem("riskLevel")) || 0;
+const inc = 100 / 7;
+
+const riskBar = document.getElementById("riskBar");
+const riskMeter = document.querySelector(".risk-meter");
+
+/* Restore meter progress + colour on page load */
+function syncRiskMeter(){
+    if(riskLevel > 100) riskLevel = 100;
+    riskBar.style.width = riskLevel + "%";
+
+    if(riskLevel > 0){
+        riskMeter.classList.add("danger");
+    }else{
+        riskMeter.classList.remove("danger");
+    }
+}
+
+syncRiskMeter();
+
+
+const chat=document.getElementById("chat");
+
+function add(name,text,cls){
+let wrap=document.createElement("div");
+wrap.className="message "+cls;
+
+let n=document.createElement("div");
+n.className="name";
+n.textContent=name;
+
+let b=document.createElement("div");
+b.className="bubble";
+b.textContent=text;
+
+wrap.appendChild(n);
+wrap.appendChild(b);
+chat.appendChild(wrap);
+chat.scrollTop=chat.scrollHeight;
+}
+
+function typing(){
+let t=document.createElement("div");
+t.id="typing";
+t.className="typing tom";
+t.textContent="Tommy is typing...";
+chat.appendChild(t);
+}
+
+function stopTyping(){let t=document.getElementById("typing");if(t)t.remove();}
+
+/* convo */
+
+setTimeout(()=>add("Jennifer","By the way...you've been dodging meeting up for like two weeks now...","jen"),500);
+
+setTimeout(()=>{
+typing();
+setTimeout(()=>{
+stopTyping();
+add("Tommy","Hello! I just think we should take our time. I don't want to rush something special because what we have feels deeper than just meeting casually.","tom");
+},650);
+},2900);
+
+setTimeout(()=>add("Jennifer","Hmm I get that but it's kinda hard to really know someone through just text...","jen"),5200);
+
+setTimeout(()=>{
+typing();
+setTimeout(()=>{
+stopTyping();
+add("Tommy","That's the thing. When two people genuinely care about each other, the connection grows naturally and we don't need a physical meetup to prove that.","tom");
+},650);
+},8500);
+
+setTimeout(()=>add("Jennifer","ERM...yea we talk a lot but I still think we should see each other face to face.","jen"),12000);
+
+setTimeout(()=>{
+typing();
+setTimeout(()=>{
+stopTyping();
+add("Tommy","I get where you are coming from. Why not we be more intimate through text first- it's normal for people who really care about each other to be more intimate...","tom");
+},350);
+},16000);
+
+/* OPTIONS */
+
+function next(){setTimeout(()=>location.href="qn7.html",2500);}
+
+function choose(c){
+
+document.querySelectorAll(".option-bubble").forEach(o=>o.style.pointerEvents="none");
+
+if(c==1){
+opt1.classList.add("red");
+storyText.textContent="You're in real danger! Don't share intimate pictures or information with someone you've never met. You never know who is behind that screen...";
+
+riskLevel+=inc;
+if(riskLevel>100) riskLevel=100;
+localStorage.setItem("riskLevel",riskLevel);
+syncRiskMeter();
+
+setTimeout(()=>{
+window.location.href="qn7.html";
+},4500);
+}
+
+if(c==2){
+opt2.classList.add("green");
+storyText.textContent="Smart thinking! Always check if this person is even real. A physical meet-up is the safest way to verify that.";
+
+setTimeout(()=>{
+window.location.href="qn7.html";
+},4500);
+}
+
+if(c==3){
+opt3.classList.add("yellow");
+storyText.textContent="You are safe for now… but you can’t keep avoiding a physical meet-up, especially before it gets too late.";
+
+riskLevel+=inc;
+if(riskLevel>100) riskLevel=100;
+localStorage.setItem("riskLevel",riskLevel);
+syncRiskMeter();
+
+setTimeout(()=>{
+window.location.href="qn7.html";
+},4500);
+}
+}
+</script>
+
+</body>
+</html>

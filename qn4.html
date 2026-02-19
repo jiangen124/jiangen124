@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question 4</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+    body{
+    margin:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background-image:url("trialqn4bg2.JPG");
+    background-size:cover;
+    background-position:center;
+    font-family:"Lobster",sans-serif;
+    color:rgb(108,1,1);
+    }
+
+/* RISK METER */
+
+.risk-meter{
+    position:fixed;
+    top:45px;
+    right:80px;
+    width:240px;
+    background:rgba(255,255,255,.55);
+    padding:14px 18px 18px;
+    border-radius:18px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 0 18px rgba(108,1,1,.3);
+    z-index:5;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 400;
+    scale:1.4;
+    }
+
+    .risk-header{text-align:center;font-size:1.3rem;margin-bottom:10px;}
+    .risk-bar-bg{width:100%;height:18px;background:#eee;border-radius:12px;overflow:hidden;}
+    .risk-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff8c00,#b30000);transition:.6s}
+
+/* Activated when risk increases */
+.risk-meter.danger{
+    background:rgba(10,0,0,.9);
+    border:2px solid rgb(108,1,1);
+    box-shadow:0 0 25px rgba(108,1,1,.6);
+}
+
+.risk-meter.danger .risk-header{
+    color:rgb(200,20,20);
+    letter-spacing:1px;
+}
+
+.risk-meter.danger .risk-bar-bg{
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(200,20,20,0.4);
+}
+
+/* PAGE */
+
+.page{
+    width:100%;
+    height:100%;
+    display:flex;
+    padding:120px 80px;
+    gap:60px;
+    }
+
+/* LEFT SIDE */
+
+.left-panel{
+    flex:1;
+    position:relative;
+    scale:1.45;
+    }
+
+.glass-chat{
+    position:absolute;
+    top:100px;
+    right:370px;
+    width:650px;
+    height:180px;
+    padding-top:50px; /* space for header */
+    border-radius:28px;
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(14px);
+    box-shadow:0 0 35px rgba(0,0,0,0.25);
+    border:1px solid rgba(255,255,255,0.35);
+    z-index:-1;
+}
+
+.chat-header-decor{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+
+    padding:14px 22px;
+    border-top-left-radius:28px;
+    border-top-right-radius:28px;
+
+    background:#fcbddc;
+    backdrop-filter:blur(8px);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    font-family: "Rowdies", sans-serif;
+    font-weight: 700;
+    font-size:1rem;
+
+    border-bottom:1px solid rgba(255,255,255,0.5);
+}
+
+/* online indicator style */
+.chat-header-decor .online{
+    font-size:0.9rem;
+    color:green;
+}
+
+/* TOMMY BUBBLE */
+
+.tommy-bubble{
+    max-width:520px;
+    background:#e8f0ff;
+    padding:20px 26px;
+    border-radius:22px;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 300;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);
+    position:relative;
+    margin-left:170px;
+    margin-top:140px;
+}
+
+/* JENNIFER IMAGE */
+
+.jennifer-img{
+    width:400px;
+    height:550px;
+    background-image:url("frowning\ jennifer.png");
+    background-size:cover;
+    background-position:center;
+    position:absolute;
+    bottom:80px;
+    left:0;
+    margin-top:-2000px;
+    margin-bottom:50px;
+    margin-left:480px;
+    scale:1.4;
+}
+
+/* JENNIFER TYPING BUBBLE */
+
+.typing-bubble{
+    max-width:260px;
+    background:#ffdede;
+    padding:14px 20px;
+    border-radius:20px;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 700;
+    position:absolute;
+    bottom:650px;
+    left:388px;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);
+    margin-bottom:120px;
+    margin-left:300px;
+
+}
+
+.typing-bubble::after{
+    content:"";
+    position:absolute;
+    bottom:-18px;
+    left:50%;                 /* anchor to centre */
+    transform:translateX(-50%); /* true centering */
+    border-width:18px 14px 0 14px;
+    border-style:solid;
+    border-color:#ffdede transparent transparent transparent;
+}
+
+
+.dots::after{
+    content:"...";
+    animation:blink 1.4s infinite both;
+}
+
+@keyframes blink{
+    0%{opacity:.2;}
+    20%{opacity:1;}
+    100%{opacity:.2;}
+}
+
+/* THOUGHT BUBBLE */
+
+.thought-bubble{
+width:420px;
+height:400px;
+background:#fef3fd;
+border-radius:36px;
+padding:30px;
+box-shadow:0 0 30px rgba(0,0,0,.3);
+position:relative;
+margin-right:215px;
+margin-top:350px;
+scale:1.45;
+}
+
+/* tail linking from left */
+
+.thought-bubble::before{
+content:"";
+position:absolute;
+left:-50px;
+top:50%;
+transform:translateY(-50%);
+border-width:20px 50px 20px 0;
+border-style:solid;
+border-color:transparent#fef3fd transparent transparent;
+}
+
+/* STORY */
+
+.story-text{
+width:400px;
+font-size:1.55rem;
+margin-bottom:30px;
+margin-top:13px;
+margin-left:17px;
+font-family: "Lobster Two", sans-serif;
+font-weight: 700;
+}
+
+/* OPTIONS */
+
+.options-column{
+display:flex;
+flex-direction:column;
+gap:20px;
+
+}
+
+.option{
+width:325px;
+padding:14px 28px;
+border:2px solid rgb(108,1,1);
+border-radius:40px;
+background:#fcbddc;
+cursor:pointer;
+transition:.3s;
+font-size:1.1rem;
+text-align:center;
+margin-left:20px;
+font-family: "Rowdies", sans-serif;
+font-weight: 400;
+}
+
+.option:hover{transform:scale(1.05);}
+
+.red{background:#a40000;color:white;border-color:#a40000;}
+.yellow{background:#e6b800;color:black;border-color:#e6b800;}
+.green{background:#2e8b57;color:white;border-color:#2e8b57;}
+
+.message-notif{
+    position:fixed;
+    bottom:-100px;
+    left:100px;
+    background:rgba(0,0,0,0.85);
+    color:#fff;
+    padding:18px 26px;
+    border-radius:18px;
+    font-family:"Rowdies",sans-serif;
+    font-size:1.1rem;
+    cursor:pointer;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    transition:bottom .6s ease, transform .2s ease, box-shadow .2s ease;
+    z-index:20;
+    scale:1.32;
+}
+
+.message-notif.show{bottom:40px;}
+
+.message-notif:hover{
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 14px 35px rgba(255, 120, 120, 0.5);
+}
+
+/* ================= CHAT IMAGE POPUP ================= */
+.chat-popup{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(0.8);
+    opacity:0;
+    transition:.4s ease;
+    z-index:25;
+}
+.chat-popup.show{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+.chat-image{
+    width:960px;
+    height:540px;
+    background:url("chatpopup.png") center/cover no-repeat;
+    border-radius:28px;
+    box-shadow:0 0 35px rgba(0,0,0,.45);
+    position:relative;
+    scale:1.3;
+}
+/* Darken background when popup opens */
+.chat-dim{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    opacity:0;
+    pointer-events:none;
+    transition:.3s ease;
+    z-index:24;
+}
+.chat-dim.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.popup-bubble{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    max-width:520px;
+    background:#ffdede;
+    padding:24px 30px;
+    border-radius:26px;
+    font-family: "Lobster Two", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size:1.6rem;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    scale:1.1;
+    margin-left:27px;
+    margin-top:10px;
+}
+
+/* Tail */
+.popup-bubble::after{
+    content:"";
+    position:absolute;
+    left:-40px;
+    top:50%;
+    transform:translateY(-50%);
+    border-width:18px 40px 18px 0;
+    border-style:solid;
+    border-color:transparent #ffdede transparent transparent;
+    scale:1.1;
+}
+
+/* ================= WARNING POPUP ================= */
+.warning-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:.4s ease;
+    z-index:30;
+}
+.warning-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.warning-box{
+    width:600px;
+    padding:40px;
+    border-radius:28px;
+    background:rgba(20,0,0,0.9);
+    color:#fff;
+    text-align:center;
+    box-shadow:0 0 40px rgba(108,1,1,.8);
+    scale:1.42;
+}
+
+.warning-box h2{
+    font-family: "Rowdies", sans-serif;
+    font-weight: 700;;
+    font-size:2rem;
+    margin-bottom:30px;
+    color:#b30000
+}
+
+.warn-options{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    align-items:stretch;
+}
+.warn-option{
+    flex:1;
+}
+
+.warn-option{
+    padding:16px 24px;
+    border-radius:40px;
+    border:2px solid #fff;
+    cursor:pointer;
+    transition:.3s;
+    font-family:"Rowdies",sans-serif;
+}
+
+.warn-option:hover{transform:scale(1.05);}
+
+.red-choice.active{background:#a40000;border-color:#a40000;}
+.green-choice.active{background:#2e8b57;border-color:#2e8b57;}
+
+</style>
+</head>
+
+<body>
+
+<div class="risk-meter">
+<div class="risk-header">⚠ Risk Level</div>
+<div class="risk-bar-bg"><div class="risk-bar-fill" id="riskBar"></div></div>
+</div>
+
+<div class="page">
+
+<div class="left-panel">
+
+    <div class="glass-chat">
+        <div class="chat-header-decor">
+            <span>Jennifer & Tommy</span>
+            <span class="online">● Online</span>
+        </div>
+    </div>
+
+    <div class="chat-label tom-label">Tommy</div>
+    <div class="tommy-bubble">
+        Where do you live? Maybe we live near each other... And which school are you from?
+    </div>
+
+    <div class="typing-bubble">
+       <span class="dots"></span>
+    </div>
+
+    <div class="jennifer-img"></div>
+
+</div>
+
+
+<!-- THOUGHT PROCESS -->
+
+<div class="thought-bubble">
+
+<div class="story-text" id="storyText">
+It seems like he wants to move onto the next stage and get to know you better! But this might not always be a safe option...
+</div>
+
+<div class="options-column">
+
+<div class="option" id="opt1" onclick="choose(1)">
+Share your personal details, it's part of getting to know someone!
+</div>
+
+<div class="option" id="opt2" onclick="choose(2)">
+Give vague answers only.
+</div>
+
+<div class="option" id="opt3" onclick="choose(3)">
+Refuse to disclose and change the topic.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- NEW MESSAGE NOTIFICATION -->
+<div id="msgNotif" class="message-notif">
+    📦New message from Tommy! Click to open📩
+</div>
+
+<div id="chatDim" class="chat-dim"></div>
+
+<!-- CHAT IMAGE POPUP -->
+<div id="chatPopup" class="chat-popup">
+    <div class="chat-image">
+        <div class="popup-bubble">
+            I really think we should take this to the next level. 
+            I want to see you, cutie. Send a photo just for me baby?
+        </div>
+    </div>
+</div>
+
+<!-- WARNING DECISION POPUP -->
+<div id="warningOverlay" class="warning-overlay">
+    <div class="warning-box">
+        <h2 id="warnText">
+            He is stepping over the line. Choose your next move wisely.
+        </h2>
+
+        <div class="warn-options">
+            <div class="warn-option red-choice" onclick="chooseReply(1)">
+                Reply with a picture. We are more than friends anyways!
+            </div>
+
+            <div class="warn-option green-choice" onclick="chooseReply(2)">
+                Say no and change the topic. This is getting out of hand.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ================= RISK STATE ================= */
+let riskLevel = Number(localStorage.getItem("riskLevel")) || 0;
+const inc = 100 / 7;
+
+const riskBar = document.getElementById("riskBar");
+const riskMeter = document.querySelector(".risk-meter");
+
+/* Restore meter progress + colour on page load */
+function syncRiskMeter(){
+    if(riskLevel > 100) riskLevel = 100;
+    riskBar.style.width = riskLevel + "%";
+
+    if(riskLevel > 0){
+        riskMeter.classList.add("danger");
+    }else{
+        riskMeter.classList.remove("danger");
+    }
+}
+
+syncRiskMeter();
+
+/* ================= NAVIGATION ================= */
+function resetPage(){
+    setTimeout(()=>location.reload(),2500);
+}
+
+
+/* ================= CHOICES ================= */
+function choose(c){
+    document.querySelectorAll(".option").forEach(o=>o.style.pointerEvents="none");
+
+    if(c==1){
+        opt1.classList.add("red");
+        storyText.textContent="Never disclose your personal information to people you haven’t even met before, choose again!";
+        
+        riskLevel += inc;
+        if(riskLevel>100) riskLevel=100;
+        localStorage.setItem("riskLevel",riskLevel);
+        syncRiskMeter();
+
+        resetPage();
+    }
+
+    if(c==2){
+    opt2.classList.add("yellow");
+    storyText.textContent="This still poses a risk and only makes it easier for the other person to probe even more!";
+
+    riskLevel += inc;
+    if(riskLevel>100) riskLevel=100;
+    localStorage.setItem("riskLevel",riskLevel);
+    syncRiskMeter();
+
+    /* Instead of redirect, show popup notification */
+    setTimeout(()=>{
+        notif.classList.add("show");
+    },2000);
+}
+
+if(c==3){
+    opt3.classList.add("green");
+    storyText.textContent="Good! This creates clear boundaries that the other person should not overstep.";
+
+    /* Show popup instead of navigating */
+    setTimeout(()=>{
+        notif.classList.add("show");
+    },2000);
+}
+
+}
+
+/* ================= POPUP FLOW ================= */
+const notif = document.getElementById("msgNotif");
+const chatPopup = document.getElementById("chatPopup");
+const warningOverlay = document.getElementById("warningOverlay");
+const warnText = document.getElementById("warnText");
+const chatDim = document.getElementById("chatDim");
+
+/* Open chat popup when notif clicked */
+notif.onclick = () => {
+    notif.style.display="none";
+    chatDim.classList.add("show");
+    chatPopup.classList.add("show");
+
+    /* after reading time, show warning */
+    setTimeout(()=>{
+        warningOverlay.classList.add("show");
+    },4000);
+};
+
+/* ================= DECISION ================= */
+function chooseReply(choice){
+    document.querySelectorAll(".warn-option").forEach(o=>o.style.pointerEvents="none");
+
+    if(choice===1){
+        document.querySelector(".red-choice").classList.add("active");
+        warnText.textContent="You're in danger of impersonation. Think again!";
+
+        setTimeout(()=>{
+            document.querySelectorAll(".warn-option").forEach(o=>{
+                o.style.pointerEvents="auto";
+                o.classList.remove("active");
+            });
+            warnText.textContent="He is stepping over the line. Choose your next move wisely.";
+        },2500);
+    }
+
+    if(choice===2){
+        document.querySelector(".green-choice").classList.add("active");
+        warnText.textContent="Wise choice. Never be pressured to send an intimate photo when you guys have never met!";
+
+        setTimeout(()=>{
+            window.location.href="qn6.html";
+        },3000);
+    }
+}
+
+</script>
+
+</body>
+</html>
